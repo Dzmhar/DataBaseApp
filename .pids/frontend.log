@@ -1,0 +1,27 @@
+
+> frontend@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1871ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1033ms (530 modules)
+ GET / 200 in 1295ms
+ GET / 200 in 44ms
+ ✓ Compiled /reader-login in 439ms (536 modules)
+ ✓ Compiled /login in 390ms (542 modules)
+ ✓ Compiled /dashboard in 413ms (548 modules)
+ ✓ Compiled /readers in 320ms (556 modules)
+ ✓ Compiled /books in 355ms (562 modules)
+ ✓ Compiled /authors in 267ms (568 modules)
+ ✓ Compiled /copies in 250ms (574 modules)
+ ○ Compiling /books/[id] ...
+ ✓ Compiled /books/[id] in 506ms (580 modules)
+ ✓ Compiled /reader/dashboard in 429ms (578 modules)
+ ✓ Compiled /reader/books in 406ms (584 modules)
+ ✓ Compiled /reader/reservations in 322ms (578 modules)
+ ✓ Compiled /reader/history in 214ms (584 modules)
+[?25h

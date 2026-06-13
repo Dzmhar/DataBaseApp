@@ -1,0 +1,17 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="httpx" />
+          <option value="beautifulsoup4" />
+          <option value="lxml" />
+          <option value="psycopg2-binary" />
+          <option value="PyYAML" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
