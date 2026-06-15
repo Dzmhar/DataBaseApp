@@ -71,8 +71,8 @@ export const api = {
   deleteReader: (id: number) => request(`/readers/${id}`, { method: "DELETE" }),
 
   // Borrowings
-  getBorrowings: (status = "") => request(`/borrowings${status ? `?status=${status}` : ""}`),
-  getActiveBorrowings: () => request("/borrowings/active"),
+  getBorrowings: () => request("/borrowings"),
+  getBorrowingsHistory: () => request("/borrowings/history"),
   borrow: (idC: number, idE: number, dniNaZwrot = 14) =>
     request("/borrowings/borrow", {
       method: "POST",
@@ -88,4 +88,6 @@ export const api = {
   getMyReservations: () => request("/reservations/my"),
   cancelReservation: (idR: number) =>
     request("/reservations/cancel", { method: "POST", body: JSON.stringify({ idR }) }),
+  borrowFromReservation: (idR: number, dniNaZwrot = 14) =>
+    request(`/reservations/${idR}/borrow`, { method: "POST", body: JSON.stringify({ dniNaZwrot }) }),
 };

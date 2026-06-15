@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { useDebounce } from "@/lib/use-debounce";
+import { useSort } from "@/lib/use-sort";
 
 export default function ReadersPage() {
   const [readers, setReaders] = useState<any[]>([]);
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const debouncedSearch = useDebounce(search);
+  const { sorted, sortKey, sortDir, toggleSort } = useSort(readers, "Nazwisko");
 
   useEffect(() => {
     api.getReaders(debouncedSearch).then(setReaders).catch((err) => setError(err.message));
@@ -42,15 +44,15 @@ export default function ReadersPage() {
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="text-left px-4 py-2">Nazwisko</th>
-              <th className="text-left px-4 py-2">Imię</th>
-              <th className="text-left px-4 py-2">Email</th>
-              <th className="text-left px-4 py-2">Telefon</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Nazwisko")}>Nazwisko{sortKey === "Nazwisko" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Imie")}>Imię{sortKey === "Imie" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Email")}>Email{sortKey === "Email" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Telefon")}>Telefon{sortKey === "Telefon" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
               <th className="text-center px-4 py-2">Akcje</th>
             </tr>
           </thead>
           <tbody>
-            {readers.map((r) => (
+            {sorted.map((r) => (
               <tr key={r.IdC} className="border-t hover:bg-slate-50">
                 <td className="px-4 py-2 font-medium">{r.Nazwisko}</td>
                 <td className="px-4 py-2">{r.Imie}</td>

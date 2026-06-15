@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { useSort } from "@/lib/use-sort";
 
 export default function BookDetailPage({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -17,6 +18,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState("");
 
   const isLibrarian = user?.role === "librarian";
+  const { sorted: sortedCopies, sortKey, sortDir, toggleSort } = useSort(copies, "IdE");
 
   useEffect(() => {
     api.getBook(parseInt(id)).then(setBook).catch((err) => setError(err.message));
@@ -114,12 +116,12 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2">ID</th>
-                <th className="text-left py-2">Status</th>
+                <th className="text-left py-2 cursor-pointer select-none" onClick={() => toggleSort("IdE")}>ID{sortKey === "IdE" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+                <th className="text-left py-2 cursor-pointer select-none" onClick={() => toggleSort("Status")}>Status{sortKey === "Status" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
               </tr>
             </thead>
             <tbody>
-              {copies.map((c) => (
+              {sortedCopies.map((c) => (
                 <tr key={c.IdE} className="border-b">
                   <td className="py-2">{c.IdE}</td>
                   <td className="py-2">

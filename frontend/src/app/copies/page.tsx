@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { useSort } from "@/lib/use-sort";
 
 export default function CopiesPage() {
   const [copies, setCopies] = useState<any[]>([]);
   const [books, setBooks] = useState<any[]>([]);
   const [selectedBook, setSelectedBook] = useState("");
   const [error, setError] = useState("");
+  const { sorted, sortKey, sortDir, toggleSort } = useSort(copies, "IdE");
 
   useEffect(() => {
     api.getBooks().then(setBooks).catch((err) => setError(err.message));
@@ -44,14 +46,14 @@ export default function CopiesPage() {
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="text-left px-4 py-2">ID</th>
-              <th className="text-left px-4 py-2">Książka</th>
-              <th className="text-left px-4 py-2">Status</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("IdE")}>ID{sortKey === "IdE" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Tytul")}>Książka{sortKey === "Tytul" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Status")}>Status{sortKey === "Status" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
               <th className="text-center px-4 py-2">Akcje</th>
             </tr>
           </thead>
           <tbody>
-            {copies.map((c) => (
+            {sorted.map((c) => (
               <tr key={c.IdE} className="border-t hover:bg-slate-50">
                 <td className="px-4 py-2 font-medium">{c.IdE}</td>
                 <td className="px-4 py-2">{c.Tytul}</td>

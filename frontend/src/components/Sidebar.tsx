@@ -11,14 +11,16 @@ const librarianNavItems = [
   { href: "/readers", label: "Czytelnicy" },
   { href: "/copies", label: "Egzemplarze" },
   { href: "/borrowings", label: "Wypożyczenia" },
+  { href: "/history", label: "Historia" },
   { href: "/reservations", label: "Rezerwacje" },
 ];
 
 const readerNavItems = [
   { href: "/reader/dashboard", label: "Dashboard" },
+  { href: "/reader/active-borrowings", label: "Aktywne wypożyczenia" },
   { href: "/reader/books", label: "Książki" },
   { href: "/reader/reservations", label: "Moje rezerwacje" },
-  { href: "/reader/history", label: "Historia" },
+  { href: "/reader/history", label: "Moje wypożyczenia" },
 ];
 
 export default function Sidebar() {

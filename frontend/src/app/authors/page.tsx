@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { useSort } from "@/lib/use-sort";
 
 export default function AuthorsPage() {
   const [authors, setAuthors] = useState<any[]>([]);
   const [error, setError] = useState("");
+  const { sorted, sortKey, sortDir, toggleSort } = useSort(authors, "Nazwisko");
 
   useEffect(() => {
     api.getAuthors().then(setAuthors).catch((err) => setError(err.message));
@@ -32,13 +34,13 @@ export default function AuthorsPage() {
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="text-left px-4 py-2">Nazwisko</th>
-              <th className="text-left px-4 py-2">Imię</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Nazwisko")}>Nazwisko{sortKey === "Nazwisko" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Imie")}>Imię{sortKey === "Imie" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
               <th className="text-center px-4 py-2">Akcje</th>
             </tr>
           </thead>
           <tbody>
-            {authors.map((a) => (
+            {sorted.map((a) => (
               <tr key={a.IdA} className="border-t hover:bg-slate-50">
                 <td className="px-4 py-2 font-medium">{a.Nazwisko}</td>
                 <td className="px-4 py-2">{a.Imie}</td>

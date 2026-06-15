@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { useDebounce } from "@/lib/use-debounce";
+import { useSort } from "@/lib/use-sort";
 
 export default function BooksPage() {
   const [books, setBooks] = useState<any[]>([]);
@@ -13,6 +14,7 @@ export default function BooksPage() {
   const { user } = useAuth();
   const isLibrarian = user?.role === "librarian";
   const debouncedSearch = useDebounce(search);
+  const { sorted, sortKey, sortDir, toggleSort } = useSort(books, "Tytul");
 
   useEffect(() => {
     api.getBooks(debouncedSearch).then(setBooks).catch((err) => setError(err.message));
@@ -50,17 +52,17 @@ export default function BooksPage() {
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="text-left px-4 py-2">Tytuł</th>
-              <th className="text-left px-4 py-2">Autorzy</th>
-              <th className="text-left px-4 py-2">ISBN</th>
-              <th className="text-center px-4 py-2">Rok</th>
-              <th className="text-center px-4 py-2">Sztuk</th>
-              <th className="text-center px-4 py-2">Dostępne</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Tytul")}>Tytuł{sortKey === "Tytul" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("Autorzy")}>Autorzy{sortKey === "Autorzy" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-left px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("ISBN")}>ISBN{sortKey === "ISBN" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-center px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("RokWydania")}>Rok{sortKey === "RokWydania" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-center px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("LiczbaEgzemplarzy")}>Sztuk{sortKey === "LiczbaEgzemplarzy" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+              <th className="text-center px-4 py-2 cursor-pointer select-none" onClick={() => toggleSort("LiczbaDostepnych")}>Dostępne{sortKey === "LiczbaDostepnych" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
               {isLibrarian && <th className="text-center px-4 py-2">Akcje</th>}
             </tr>
           </thead>
           <tbody>
-            {books.map((b) => (
+            {sorted.map((b) => (
               <tr key={b.IdK} className="border-t hover:bg-slate-50">
                 <td className="px-4 py-2 font-medium">{b.Tytul}</td>
                 <td className="px-4 py-2 text-slate-500">{b.Autorzy || "-"}</td>

@@ -1,2 +1,80 @@
 INFO:     Will watch for changes in these directories: ['/home/dima/bazaBiblioteka/backend']
-ERROR:    [Errno 98] Address already in use
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [24327] using StatReload
+INFO:     Started server process [24332]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54920 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41350 - "OPTIONS /api/auth/reader-login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41350 - "POST /api/auth/reader-login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41350 - "OPTIONS /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41350 - "OPTIONS /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41354 - "OPTIONS /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41356 - "OPTIONS /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41356 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41354 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41366 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41378 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41354 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41356 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41356 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41354 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41354 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41356 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41356 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41354 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41354 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41356 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53074 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53090 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53090 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53074 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/reservations/my HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53122 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53106 - "GET /api/readers/1/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "OPTIONS /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "OPTIONS /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47102 - "OPTIONS /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47102 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "OPTIONS /api/borrowings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47102 - "OPTIONS /api/borrowings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47102 - "GET /api/borrowings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "GET /api/borrowings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "OPTIONS /api/borrowings/return HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "POST /api/borrowings/return HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "GET /api/borrowings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "OPTIONS /api/borrowings/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50950 - "OPTIONS /api/borrowings/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50950 - "GET /api/borrowings/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "GET /api/borrowings/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "OPTIONS /api/reservations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50950 - "OPTIONS /api/reservations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50950 - "GET /api/reservations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47094 - "GET /api/reservations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47718 - "OPTIONS /api/reservations/15/borrow HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47718 - "POST /api/reservations/15/borrow HTTP/1.1" 201 Created
+INFO:     127.0.0.1:47718 - "GET /api/reservations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47718 - "GET /api/borrowings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47734 - "GET /api/borrowings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59312 - "GET /api/borrowings/history HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59326 - "GET /api/borrowings/history HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24332]
+INFO:     Stopping reloader process [24327]

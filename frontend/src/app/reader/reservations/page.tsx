@@ -3,19 +3,21 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { useSort } from "@/lib/use-sort";
 
 export default function ReaderReservationsPage() {
   const [reservations, setReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const { user } = useAuth();
+  const { sorted, sortKey, sortDir, toggleSort } = useSort(reservations, "Tytul");
 
   const loadReservations = async () => {
     if (!user || user.role !== "reader") return;
     setLoading(true);
     try {
       const data = await api.getMyReservations();
-      setReservations(data);
+      setReservations(data.filter((r: any) => r.StatusRezerwacji === "Aktywna"));
     } catch {
       setMessage("Nie udało się załadować rezerwacji");
     } finally {
@@ -53,14 +55,14 @@ export default function ReaderReservationsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b">
-                <th className="text-left py-3 px-4">Książka</th>
-                <th className="text-left py-3 px-4">Data rezerwacji</th>
+                <th className="text-left py-3 px-4 cursor-pointer select-none" onClick={() => toggleSort("Tytul")}>Książka{sortKey === "Tytul" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
+                <th className="text-left py-3 px-4 cursor-pointer select-none" onClick={() => toggleSort("DataRezerwacji")}>Data rezerwacji{sortKey === "DataRezerwacji" ? (sortDir === "asc" ? " ▲" : " ▼") : ""}</th>
                 <th className="text-left py-3 px-4">Status</th>
                 <th className="text-left py-3 px-4">Akcje</th>
               </tr>
             </thead>
             <tbody>
-              {reservations.map((r) => (
+              {sorted.map((r) => (
                 <tr key={r.IdR} className="border-b hover:bg-slate-50">
                   <td className="py-3 px-4">{r.Tytul}</td>
                   <td className="py-3 px-4">{r.DataRezerwacji}</td>

@@ -6,22 +6,20 @@
   - Local:        http://localhost:3000
 
  ✓ Starting...
- ✓ Ready in 1871ms
+ ✓ Ready in 1872ms
  ○ Compiling / ...
- ✓ Compiled / in 1033ms (530 modules)
- GET / 200 in 1295ms
- GET / 200 in 44ms
- ✓ Compiled /reader-login in 439ms (536 modules)
- ✓ Compiled /login in 390ms (542 modules)
- ✓ Compiled /dashboard in 413ms (548 modules)
- ✓ Compiled /readers in 320ms (556 modules)
- ✓ Compiled /books in 355ms (562 modules)
- ✓ Compiled /authors in 267ms (568 modules)
- ✓ Compiled /copies in 250ms (574 modules)
- ○ Compiling /books/[id] ...
- ✓ Compiled /books/[id] in 506ms (580 modules)
- ✓ Compiled /reader/dashboard in 429ms (578 modules)
- ✓ Compiled /reader/books in 406ms (584 modules)
- ✓ Compiled /reader/reservations in 322ms (578 modules)
- ✓ Compiled /reader/history in 214ms (584 modules)
+ ✓ Compiled / in 1121ms (530 modules)
+ GET / 200 in 1361ms
+ GET / 200 in 126ms
+ ○ Compiling /reader-login ...
+ ✓ Compiled /reader-login in 1690ms (550 modules)
+ ○ Compiling /reader/dashboard ...
+ ✓ Compiled /reader/dashboard in 635ms (542 modules)
+ ✓ Compiled /reader/history in 378ms (550 modules)
+ ✓ Compiled /reader/reservations in 315ms (556 modules)
+ ✓ Compiled /login in 329ms (558 modules)
+ ✓ Compiled /dashboard in 431ms (560 modules)
+ ✓ Compiled /borrowings in 273ms (566 modules)
+ ✓ Compiled /history in 346ms (572 modules)
+ ✓ Compiled /reservations in 260ms (578 modules)
 [?25h

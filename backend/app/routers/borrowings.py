@@ -9,32 +9,30 @@ router = APIRouter(prefix="/api/borrowings", tags=["borrowings"])
 
 @router.get("")
 def list_borrowings(
-    status: str = "",
     db: MySQLConnection = Depends(get_db),
     _=Depends(require_librarian),
-):
-    cursor = db.cursor(dictionary=True)
-    query = "SELECT * FROM v_zestawienie_wypozyczen"
-    params = []
-    if status:
-        query += " WHERE Status = %s"
-        params.append(status)
-    query += " ORDER BY DataWypozyczenia DESC"
-    cursor.execute(query, params)
-    rows = cursor.fetchall()
-    cursor.close()
-    return rows
-
-
-@router.get("/active")
-def list_active_borrowings(
-    db: MySQLConnection = Depends(get_db), _=Depends(require_librarian)
 ):
     cursor = db.cursor(dictionary=True)
     cursor.execute(
         """SELECT * FROM v_zestawienie_wypozyczen
            WHERE RzeczywistaDataZwrotu IS NULL
            ORDER BY TerminZwrotu ASC"""
+    )
+    rows = cursor.fetchall()
+    cursor.close()
+    return rows
+
+
+@router.get("/history")
+def list_history(
+    db: MySQLConnection = Depends(get_db),
+    _=Depends(require_librarian),
+):
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(
+        """SELECT * FROM v_zestawienie_wypozyczen
+           WHERE RzeczywistaDataZwrotu IS NOT NULL
+           ORDER BY RzeczywistaDataZwrotu DESC"""
     )
     rows = cursor.fetchall()
     cursor.close()

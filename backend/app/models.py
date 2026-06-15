@@ -79,3 +79,7 @@ class ReserveRequest(BaseModel):
 
 class CancelReservationRequest(BaseModel):
     idR: int
+
+
+class BorrowFromReservationRequest(BaseModel):
+    dniNaZwrot: Optional[int] = 14

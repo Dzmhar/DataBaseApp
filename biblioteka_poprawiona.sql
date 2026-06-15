@@ -537,6 +537,10 @@ BEGIN
         SET MESSAGE_TEXT = 'Ksiazka ma juz aktywna rezerwacje innego czytelnika';
     END IF;
 
+    IF NOT EXISTS (SELECT 1 FROM `EGZEMPLARZE` WHERE `IdK` = p_IdK AND `Status` = 'Dostepny') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Brak dostepnych egzemplarzy do rezerwacji';
+    END IF;
+
     INSERT INTO `REZERWACJE` (`IdC`,`IdK`,`DataRezerwacji`,`StatusRezerwacji`)
     VALUES (p_IdC, p_IdK, CURDATE(), 'Aktywna');
 
@@ -575,6 +579,58 @@ BEGIN
      WHERE `IdR` = p_IdR;
 
     COMMIT;
+END$$
+
+-- TRA/006b: Wypozyczenie z rezerwacji (bibliotekarz akceptuje rezerwacje)
+DROP PROCEDURE IF EXISTS `sp_wypozycz_z_rezerwacji`;
+CREATE PROCEDURE `sp_wypozycz_z_rezerwacji` (
+  IN `p_IdR` INT, IN `p_IdB` INT, IN `p_DniNaZwrot` INT
+)
+BEGIN
+    DECLARE v_IdC INT;
+    DECLARE v_IdK INT;
+    DECLARE v_IdE INT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    START TRANSACTION;
+
+    SELECT `IdC`, `IdK` INTO v_IdC, v_IdK
+      FROM `REZERWACJE`
+     WHERE `IdR` = p_IdR AND `StatusRezerwacji` = 'Aktywna'
+        FOR UPDATE;
+
+    IF v_IdC IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Rezerwacja nie istnieje lub nie jest aktywna';
+    END IF;
+
+    SELECT `IdE` INTO v_IdE
+      FROM `EGZEMPLARZE`
+     WHERE `IdK` = v_IdK AND `Status` = 'Zarezerwowany'
+     LIMIT 1
+        FOR UPDATE;
+
+    IF v_IdE IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Brak zarezerwowanego egzemplarza';
+    END IF;
+
+    UPDATE `EGZEMPLARZE` SET `Status` = 'Wypozyczony' WHERE `IdE` = v_IdE;
+
+    INSERT INTO `WYPOZYCZENIA`
+        (`IdC`,`IdE`,`IdB`,`DataWypozyczenia`,`TerminZwrotu`)
+    VALUES
+        (v_IdC, v_IdE, p_IdB, CURDATE(),
+         DATE_ADD(CURDATE(), INTERVAL IFNULL(p_DniNaZwrot,14) DAY));
+
+    UPDATE `REZERWACJE`
+       SET `StatusRezerwacji` = 'Zrealizowana'
+     WHERE `IdR` = p_IdR;
+
+    COMMIT;
+    SELECT LAST_INSERT_ID() AS `IdW`;
 END$$
 
 -- TRA/010: Edycja danych czytelnika
