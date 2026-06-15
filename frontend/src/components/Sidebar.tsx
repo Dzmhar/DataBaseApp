@@ -21,6 +21,7 @@ const readerNavItems = [
   { href: "/reader/books", label: "Książki" },
   { href: "/reader/reservations", label: "Moje rezerwacje" },
   { href: "/reader/history", label: "Moje wypożyczenia" },
+  { href: "/reader/profile", label: "Mój profil" },
 ];
 
 export default function Sidebar() {

@@ -90,7 +90,7 @@ def login(req: LoginRequest, db: MySQLConnection = Depends(get_db)):
 def reader_login(req: ReaderLoginRequest, db: MySQLConnection = Depends(get_db)):
     cursor = db.cursor(dictionary=True)
     cursor.execute(
-        "SELECT IdC, Nazwisko, Imie, Login FROM CZYTELNICY WHERE Login = %s AND Haslo = SHA2(%s, 256)",
+        "SELECT IdC, Nazwisko, Imie, Email, Telefon, Login FROM CZYTELNICY WHERE Login = %s AND Haslo = SHA2(%s, 256)",
         (req.login, req.haslo),
     )
     reader = cursor.fetchone()

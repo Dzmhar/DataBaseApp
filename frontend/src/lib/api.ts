@@ -69,6 +69,8 @@ export const api = {
   updateReader: (id: number, data: { nazwisko: string; imie: string; email?: string; telefon?: string; login: string; haslo: string }) =>
     request(`/readers/${id}`, { method: "PUT", body: JSON.stringify(data) }),
   deleteReader: (id: number) => request(`/readers/${id}`, { method: "DELETE" }),
+  updateMyProfile: (data: { nazwisko: string; imie: string; email?: string; telefon?: string; login: string; haslo?: string }) =>
+    request("/readers/me", { method: "PUT", body: JSON.stringify(data) }),
 
   // Borrowings
   getBorrowings: () => request("/borrowings"),

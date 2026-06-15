@@ -643,6 +643,13 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM `CZYTELNICY` WHERE `IdC` = p_IdC) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Czytelnik nie istnieje';
     END IF;
+    IF EXISTS (SELECT 1 FROM `CZYTELNICY` WHERE `IdC` != p_IdC AND `Login` = TRIM(p_Login) COLLATE utf8mb4_polish_ci) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Login jest juz zajety';
+    END IF;
+    IF p_Email IS NOT NULL AND TRIM(p_Email) != ''
+       AND EXISTS (SELECT 1 FROM `CZYTELNICY` WHERE `IdC` != p_IdC AND `Email` = TRIM(p_Email) COLLATE utf8mb4_polish_ci) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email jest juz zajety';
+    END IF;
     UPDATE `CZYTELNICY`
        SET `Nazwisko` = TRIM(p_Nazwisko),
            `Imie`     = TRIM(p_Imie),

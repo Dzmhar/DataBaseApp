@@ -62,6 +62,15 @@ class ReaderCreate(BaseModel):
     haslo: str
 
 
+class ReaderUpdate(BaseModel):
+    nazwisko: str
+    imie: str
+    email: Optional[str] = None
+    telefon: Optional[str] = None
+    login: str
+    haslo: str = ""
+
+
 class BorrowRequest(BaseModel):
     idC: int
     idE: int

@@ -15,6 +15,8 @@ interface Reader {
   IdC: number;
   Nazwisko: string;
   Imie: string;
+  Email?: string;
+  Telefon?: string;
   Login: string;
   role: "reader";
 }
@@ -28,6 +30,7 @@ interface AuthContextType {
   readerLogin: (login: string, haslo: string) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -72,8 +75,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const updateUser = (user: User) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, login, readerLogin, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, token, login, readerLogin, logout, isLoading, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

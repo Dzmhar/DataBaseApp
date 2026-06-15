@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from mysql.connector import MySQLConnection
 from app.database import get_db
@@ -8,7 +9,7 @@ router = APIRouter(prefix="/api/copies", tags=["copies"])
 
 
 @router.get("")
-def list_copies(book_id: int = None, db: MySQLConnection = Depends(get_db)):
+def list_copies(book_id: Optional[int] = None, db: MySQLConnection = Depends(get_db)):
     cursor = db.cursor(dictionary=True)
     if book_id:
         cursor.execute(

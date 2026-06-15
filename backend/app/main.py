@@ -33,7 +33,10 @@ app.include_router(reservations.router)
 
 
 @app.get("/api/dashboard")
-def dashboard(db: MySQLConnection = Depends(get_db)):
+def dashboard(
+    db: MySQLConnection = Depends(get_db),
+    _=Depends(require_librarian),
+):
     cursor = db.cursor(dictionary=True)
     data = {}
     cursor.execute("SELECT COUNT(*) AS val FROM KSIAZKI")

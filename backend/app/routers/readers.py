@@ -1,8 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from mysql.connector import MySQLConnection
 from app.database import get_db
-from app.models import ReaderCreate
-from app.routers.auth_router import require_librarian, require_librarian_or_reader_owner
+from app.models import ReaderCreate, ReaderUpdate
+from app.routers.auth_router import (
+    require_librarian,
+    require_librarian_or_reader_owner,
+    require_reader,
+)
 
 router = APIRouter(prefix="/api/readers", tags=["readers"])
 
@@ -21,11 +25,29 @@ def list_readers(
     return rows
 
 
+@router.get("/me")
+def get_my_profile(
+    db: MySQLConnection = Depends(get_db),
+    payload: dict = Depends(require_reader),
+):
+    idC = int(payload["sub"])
+    cursor = db.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT IdC, Nazwisko, Imie, Email, Telefon, Login FROM CZYTELNICY WHERE IdC=%s",
+        (idC,),
+    )
+    reader = cursor.fetchone()
+    cursor.close()
+    if not reader:
+        raise HTTPException(status_code=404, detail="Reader not found")
+    return reader
+
+
 @router.get("/{idC}")
 def get_reader(
     idC: int,
     db: MySQLConnection = Depends(get_db),
-    _=Depends(require_librarian),
+    _=Depends(require_librarian_or_reader_owner),
 ):
     cursor = db.cursor(dictionary=True)
     cursor.execute(
@@ -84,6 +106,42 @@ def add_reader(
     cursor.close()
     db.commit()
     return {"IdC": idC, "message": "Reader added"}
+
+
+@router.put("/me")
+def update_my_profile(
+    data: ReaderUpdate,
+    db: MySQLConnection = Depends(get_db),
+    payload: dict = Depends(require_reader),
+):
+    idC = int(payload["sub"])
+    cursor = db.cursor()
+    try:
+        cursor.callproc(
+            "sp_edytuj_czytelnika",
+            (
+                idC,
+                data.nazwisko,
+                data.imie,
+                data.email,
+                data.telefon,
+                data.login,
+                data.haslo,
+            ),
+        )
+        cursor.close()
+        db.commit()
+        cursor = db.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT IdC, Nazwisko, Imie, Email, Telefon, Login FROM CZYTELNICY WHERE IdC=%s",
+            (idC,),
+        )
+        reader = cursor.fetchone()
+        cursor.close()
+        return reader
+    except Exception as e:
+        cursor.close()
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.put("/{idC}")

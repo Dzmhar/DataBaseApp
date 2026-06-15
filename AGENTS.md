@@ -3,54 +3,37 @@
 ## Stack
 - **Backend**: FastAPI (uvicorn), raw MySQL via `mysql-connector-python`, JWT auth
 - **Frontend**: Next.js 14 App Router, TypeScript, Tailwind CSS, no external UI lib
-- **DB**: MariaDB 10.11 via Docker, schema in `biblioteka_poprawiona.sql`
-- **Python**: venv at `.venv/` (root), dependencies in `backend/requirements.txt`
-
-## Project layout
-```
-backend/          FastAPI app (app.main:app, port 8000)
-frontend/         Next.js 14 app (port 3000)
-start.sh          Orchestrated startup (Docker → backend → frontend)
-stop.sh           Graceful shutdown
-biblioteka_poprawiona.sql   DB schema + seed data
-```
+- **DB**: MariaDB 10.11 via Docker, schema in `biblioteka_poprawiona.sql`, contains stored procedures + views for all mutations/reads
+- **Python**: venv at `.venv/` (root), deps in `backend/requirements.txt`
 
 ## Commands
 ```bash
-# Start everything (requires Docker + .venv + node_modules)
-./start.sh
-
-# Stop everything
-./stop.sh
-
-# Backend dev only (from repo root)
-.venv/bin/uvicorn backend.app.main:app --reload --port 8000
-
-# Frontend dev only
-cd frontend && npm run dev
-
-# Frontend lint only
-cd frontend && npm run lint
-
-# Frontend build
-cd frontend && npm run build
+./start.sh               # Docker → backend → frontend (creates .pids/)
+./stop.sh                # Graceful shutdown (kills pids, stops container)
+.venv/bin/uvicorn backend.app.main:app --reload --port 8000   # backend only
+cd frontend && npm run dev     # frontend only
+cd frontend && npm run lint    # frontend lint
+cd frontend && npm run build   # frontend typecheck + build
 ```
 
-## Key architecture facts
-- **No ORM** — backend uses raw SQL via `mysql.connector` with `cursor(dictionary=True)`
-- **Two auth roles**: `librarian` (full access) and `reader` (self-service only)
-- **Passwords** hashed via MySQL `SHA2()` — done in SQL queries, not in Python
-- **JWT** stored in `localStorage` on frontend, sent as `Authorization: Bearer <token>`
+## Architecture
+- **No ORM** — raw SQL via `mysql.connector` with `cursor(dictionary=True)`
+- **Mutations** via stored procedures (`callproc`): `sp_dodaj_ksiazke`, `sp_wypozycz_egzemplarz`, `sp_zwrot_egzemplarza`, `sp_zarezerwuj_ksiazke`, `sp_anuluj_rezerwacje`, `sp_wypozycz_z_rezerwacji`, `sp_edytuj_ksiazke`
+- **Reads** via DB views: `v_wyszukiwanie_ksiazek`, `v_zestawienie_wypozyczen`
+- **Auth**: three dependency functions in `backend/app/routers/auth_router.py` — `require_librarian`, `require_reader`, `require_librarian_or_reader_owner`
+- **Passwords** hashed via MySQL `SHA2()` in SQL queries, not in Python
+- **JWT** in `localStorage`, sent as `Authorization: Bearer <token>`, default 24h expiry (from `backend/.env`)
 - **API base**: `http://localhost:8000/api` hardcoded in `frontend/src/lib/api.ts`
-- **CORS**: only allows `http://localhost:3000`
-- **Routes**: backend uses prefix `/api/auth`, `/api/books`, `/api/authors`, `/api/copies`, `/api/readers`, `/api/borrowings`, `/api/reservations`, `/api/dashboard`
-- **Frontend**: Next.js App Router with `(auth)` redirect logic in `AppLayout.tsx` — login pages at `/login` (librarian) and `/reader-login` (reader)
-- **Auth context** (`AuthProvider` + `AppLayout`) wraps all routes; unauthenticated users redirect to `/reader-login`
+- **CORS**: only `http://localhost:3000`
+- **Two nav structures** in `Sidebar.tsx`: librarian (`/dashboard`, `/books`, `/authors`, `/readers`, `/copies`, `/borrowings`, `/history`, `/reservations`) and reader (`/reader/dashboard`, `/reader/active-borrowings`, `/reader/books`, `/reader/reservations`, `/reader/history`)
+- **Auth redirect**: unauthenticated → `/reader-login`; librarian → `/dashboard`; reader → `/reader/dashboard`
+- **Backend `.env`** at `backend/.env` — loaded explicitly via `load_dotenv()` in `config.py`
+- `migration.sql` contains a standalone procedure (`sp_zarezerwuj_ksiazke`) separate from the main schema
 
-## Quirks & constraints
-- No Python linter/formatter config committed (ruff cache exists but no `ruff.toml` or `pyproject.toml`)
-- No tests anywhere
-- **When editing the SQL schema**, the DB container must be recreated (`docker rm -f biblioteka-mariadb && ./start.sh`)
-- Backend `.env` lives at `backend/.env` — not loaded automatically by uvicorn; `config.py` calls `load_dotenv()` explicitly
-- Frontend `next.config.mjs` is empty (no custom config)
-- Used Next.js version can differ from your training data — check `node_modules/next/dist/docs/` before writing frontend code (see `frontend/AGENTS.md`)
+## Conventions & quirks
+- `db.commit()` must be called manually after every mutation in router code
+- `frontend/AGENTS.md` references `node_modules/next/dist/docs/` for Next.js version-specific APIs — check before writing frontend code
+- When editing the SQL schema, recreate the DB container: `docker rm -f biblioteka-mariadb && ./start.sh`
+- No tests, no CI (.github/ absent), no Python linter/formatter config
+- Frontend uses `@/` path alias → `./src/*`
+- Start script manages processes via `.pids/` directory (not docker-compose)
